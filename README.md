@@ -115,6 +115,15 @@ Since LLMs are strong in natural language understanding and classification, I fi
 
 ![clara-copilot drawio](https://github.com/user-attachments/assets/7a00a8d3-bc7d-438a-bcfb-75711d936daf)
 
+## Live Link
+- https://clara-copilot.vercel.app/
+
+## Sample Prompts
+- A 25-year-old female is experiencing increased stress due to work and relationship issues. She reports difficulty sleeping and concentrating.
+- A 35-year-old male presenting with symptoms of anxiety and depression. He has been experiencing persistent low mood, loss of interest in daily activities, and difficulty maintaining focus at work. He reports poor sleep quality and has been withdrawing from social interactions over the past 3 months.
+- A 42-year-old individual seeking counseling after a recent divorce. They report experiencing intense mood swings, difficulty managing anger, and have started having panic attacks in social situations. They mention using alcohol more frequently to cope with stress and have noticed a significant decrease in their work performance.
+- A 30-year-old individual is experiencing difficulties in their long-term relationship. They report feeling emotionally disconnected from their partner, having frequent arguments about communication issues, and experiencing increased anxiety about the future of their relationship. They mention feeling stuck and unsure about how to proceed.
+
 
 
 
