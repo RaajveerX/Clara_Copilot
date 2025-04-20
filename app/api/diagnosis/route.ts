@@ -1,12 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 
+const getGCPCredentials = () => {
+    // for Vercel, use environment variables
+    return process.env.GCP_PRIVATE_KEY
+        ? {
+            credentials: {
+                client_email: process.env.GCP_SERVICE_ACCOUNT_EMAIL,
+                private_key: process.env.GCP_PRIVATE_KEY,
+            },
+            projectId: process.env.GCP_PROJECT_ID,
+        }
+        // for local development, use gcloud CLI
+        : {};
+};
 
 // Initialize Vertex with your Cloud project and location
 const ai = new GoogleGenAI({
     vertexai: true,
     project: '764803801890',
-    location: 'us-central1'
+    location: 'us-central1',
+    googleAuthOptions: getGCPCredentials()
   });
   const model = 'projects/764803801890/locations/us-central1/endpoints/2273918689101217792';
   

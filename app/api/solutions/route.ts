@@ -2,12 +2,26 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { GoogleGenAI } from '@google/genai';
 
+const getGCPCredentials = () => {
+    // for Vercel, use environment variables
+    return process.env.GCP_PRIVATE_KEY
+        ? {
+            credentials: {
+                client_email: process.env.GCP_SERVICE_ACCOUNT_EMAIL,
+                private_key: process.env.GCP_PRIVATE_KEY,
+            },
+            projectId: process.env.GCP_PROJECT_ID,
+        }
+        // for local development, use gcloud CLI
+        : {};
+};
 
 // Initialize Vertex with your Cloud project and location
 const ai = new GoogleGenAI({
-  vertexai: true,
-  project: '764803801890',
-  location: 'us-central1'
+    vertexai: true,
+    project: '764803801890',
+    location: 'us-central1',
+    googleAuthOptions: getGCPCredentials()
 });
 const model = 'projects/764803801890/locations/us-central1/endpoints/5638107610746978304';
 
@@ -46,8 +60,8 @@ async function getSolutions(patientContext: string) {
         3. Output the suggestions as a comma-separated Proper cased list of values.
         4. Do not include any explanations or additional text beyond the list of suggestions.
         5. Do not invent any information. Base your suggestions solely on the provided patient information and context.`};
-    
-        const req = {
+
+    const req = {
         model: model,
         contents: [
             { role: 'user', parts: [text1] }

@@ -1,11 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { GoogleGenAI } from '@google/genai';
 
+const getGCPCredentials = () => {
+    // for Vercel, use environment variables
+    return process.env.GCP_PRIVATE_KEY
+        ? {
+            credentials: {
+                client_email: process.env.GCP_SERVICE_ACCOUNT_EMAIL,
+                private_key: process.env.GCP_PRIVATE_KEY,
+            },
+            projectId: process.env.GCP_PROJECT_ID,
+        }
+        // for local development, use gcloud CLI
+        : {};
+};
+
 // Initialize Vertex with your Cloud project and location
 const ai = new GoogleGenAI({
     vertexai: true,
     project: 'title-and-segmentation',
-    location: 'us-central1'
+    location: 'us-central1',
+    googleAuthOptions: getGCPCredentials()
 });
 const model = 'gemini-2.0-flash-001';
 
@@ -17,6 +32,7 @@ const generationConfig = {
         parts: [siText1]
     },
 };
+
 
 
 async function getResponse(patientContext: string, diagnosis: string, solutions: string) {
@@ -87,8 +103,8 @@ export async function POST(request: NextRequest) {
         }
 
         const response = await getResponse(
-            patientContext, 
-            diagnosis.join(', '), 
+            patientContext,
+            diagnosis.join(', '),
             solutions.join(', ')
         );
 
@@ -102,7 +118,7 @@ export async function POST(request: NextRequest) {
             { status: 500 }
         );
     }
-} 
+}
 
 
 // A sample response from the API
