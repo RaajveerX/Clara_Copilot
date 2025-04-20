@@ -86,9 +86,13 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const response = await getResponse(patientContext, diagnosis , solutions);
+        const response = await getResponse(
+            patientContext, 
+            diagnosis.join(', '), 
+            solutions.join(', ')
+        );
 
-        const responseText = response.candidates[0].content.parts[0].text as string;
+        const responseText = response?.candidates?.[0]?.content?.parts?.[0]?.text as string || "No response generated";
 
         return NextResponse.json({ response: responseText });
     } catch (error) {
