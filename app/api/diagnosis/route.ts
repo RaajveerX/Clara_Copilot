@@ -8,12 +8,13 @@ const ai = new GoogleGenAI({
     project: '764803801890',
     location: 'us-central1'
   });
-  const model = 'projects/764803801890/locations/us-central1/endpoints/381280945698766848';
+  const model = 'projects/764803801890/locations/us-central1/endpoints/2273918689101217792';
+  
   
 
 const siText1 = { text: `You are a mental health analysis assistant. Your task is to help mental health counselors identify potential problem areas their patients might be experiencing based on the provided patient context.  You are not a substitute for a licensed professional and your output should be used for informational purposes only.` };
 
-// Set up generation config
+// Set up generation config, omit safety settings since the patient context can be sensitive
 const generationConfig = {
     maxOutputTokens: 8192,
     temperature: 1,
@@ -34,6 +35,7 @@ const generationConfig = {
 
 async function getDiagnosis(patientContext: string) {
 
+    // Prompt
     const text1 = {
         text: `You will be provided with the following information:
 
@@ -42,10 +44,10 @@ async function getDiagnosis(patientContext: string) {
         Instructions:
         
         1. Carefully analyze the provided patient context.
-        2. Identify potential problem areas the patient might be experiencing based on the information provided.
-        3. Output the potential problem areas as a comma-separated Proper cased list of values.  For example: anxiety, depression, relationship issues, work stress, grief.
-        4. If no specific problems can be identified based on the context, output "Insufficient information to determine problem areas."
-        5. Remember, your output is for informational purposes only and should not be considered a diagnosis.  Always consult with a licensed mental health professional for diagnosis and treatment.`};
+        2. If the patient context is not provided or is not enough or is not relevant, do not make up an answer, return "Insufficient information to determine problem areas."
+        3. Identify potential problem areas the patient might be experiencing based on the information provided.
+        4. Output the potential problem areas as a comma-separated Proper cased list of values.
+        5. If no specific problems can be identified based on the context, output "Insufficient information to determine problem areas."`};
 
     const req = {
         model: model,
@@ -55,6 +57,7 @@ async function getDiagnosis(patientContext: string) {
         config: generationConfig,
     };
 
+    
     const streamingResp = await ai.models.generateContentStream(req);
 
     let diagnosis = '';
@@ -70,6 +73,7 @@ async function getDiagnosis(patientContext: string) {
     return diagnosis;
 }
 
+// POST request to get diagnosis /api/diagnosis
 export async function POST(request: NextRequest) {
     try {
         const { patientContext } = await request.json();

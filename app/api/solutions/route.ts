@@ -2,13 +2,14 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { GoogleGenAI } from '@google/genai';
 
+
 // Initialize Vertex with your Cloud project and location
 const ai = new GoogleGenAI({
-    vertexai: true,
-    project: '764803801890',
-    location: 'us-central1'
+  vertexai: true,
+  project: '764803801890',
+  location: 'us-central1'
 });
-const model = 'projects/764803801890/locations/us-central1/endpoints/3831601210217988096';
+const model = 'projects/764803801890/locations/us-central1/endpoints/5638107610746978304';
 
 const siText1 = { text: `You are a "Mental Health Copilot" designed to assist mental health counselors. Your task is to analyze patient information and their current context to suggest possible solutions or interventions.` };
 
@@ -44,8 +45,7 @@ async function getSolutions(patientContext: string) {
         2. Based on the provided information, suggest possible solutions or interventions that could be beneficial for the patient.
         3. Output the suggestions as a comma-separated Proper cased list of values.
         4. Do not include any explanations or additional text beyond the list of suggestions.
-        5. Do not invent any information. Base your suggestions solely on the provided patient information and context.
-        6. If the provided information is insufficient to suggest any solutions, output: "Insufficient information to provide suggestions. Please provide more details about the patient and their context."`};
+        5. Do not invent any information. Base your suggestions solely on the provided patient information and context.`};
     
         const req = {
         model: model,
@@ -58,6 +58,7 @@ async function getSolutions(patientContext: string) {
     const streamingResp = await ai.models.generateContentStream(req);
     let solutions = '';
 
+    // Will use this in the future to stream the response to the client
     for await (const chunk of streamingResp) {
         if (chunk.text) {
             solutions += chunk.text;
@@ -71,7 +72,7 @@ async function getSolutions(patientContext: string) {
 }
 
 
-
+// POST request to get solutions /api/solutions
 export async function POST(request: NextRequest) {
     try {
         const { patientContext } = await request.json();

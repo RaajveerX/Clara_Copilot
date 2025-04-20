@@ -33,8 +33,9 @@ async function getResponse(patientContext: string, diagnosis: string, solutions:
         1. Carefully consider the provided patient context, problem areas, and possible solutions.
         2. Generate a natural language response that can help the mental health counselor deliver the best care to the patient.
         3. Your response should be informative, supportive, and focused on aiding the counselor in their decision-making process.
-        4. Do not offer medical advice or diagnoses. Your role is to provide support and insights based on the given information.
-        5. If any information is missing or unclear, request clarification using the appropriate placeholder name.
+        4. Return properly formatted text with paragraphs, breaks, and an easily readable format.
+        5. Do not offer medical advice or diagnoses. Your role is to provide support and insights based on the given information, Do not ask follow up questions.
+        6. If any information is missing or unclear, request clarification using the appropriate placeholder name.
         
         Example:
         
@@ -85,9 +86,9 @@ export async function POST(request: NextRequest) {
             );
         }
 
-        const response = await getResponse(patientContext, diagnosis, solutions);
+        const response = await getResponse(patientContext, diagnosis , solutions);
 
-        const responseText = response.candidates[0].content.parts[0].text;
+        const responseText = response.candidates[0].content.parts[0].text as string;
 
         return NextResponse.json({ response: responseText });
     } catch (error) {
