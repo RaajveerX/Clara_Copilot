@@ -113,4 +113,169 @@ Since LLMs are strong in natural language understanding and classification, I fi
 - Database: Not required, real-time predictions only
 - Deployment: Vercel
 
----
+# Thera Copilot System Design
+
+## Architecture Overview
+
+```mermaid
+graph TD
+    Client[Client Browser] --> |Next.js App| Frontend[Frontend Components]
+    Frontend --> |API Routes| Backend[Backend Services]
+    Backend --> |Google GenAI| AI[Gemini Models]
+    
+    subgraph Frontend Components
+        UI[User Interface]
+        Nav[Navbar]
+        DP[Diagnosis Panel]
+        CP[Chatbot Panel]
+    end
+    
+    subgraph Backend Services
+        API1[/api/diagnosis]
+        API2[/api/solutions]
+        API3[/api/response]
+    end
+    
+    subgraph Gemini Models
+        GM1[Diagnosis Model]
+        GM2[Solutions Model]
+        GM3[Response Model]
+    end
+```
+
+## Component Details
+
+### Frontend Components
+1. **User Interface (`app/page.tsx`)**
+   - Main application container
+   - State management for user input and AI responses
+   - Coordinates between Diagnosis and Chatbot panels
+
+2. **Navbar (`components/Navbar.tsx`)**
+   - Application header
+   - Branding and navigation elements
+
+3. **Diagnosis Panel (`components/DiagnosisPanel.tsx`)**
+   - Displays identified problems
+   - Shows possible solutions
+   - Patient context display
+   - Clear functionality
+
+4. **Chatbot Panel (`components/ChatbotPanel.tsx`)**
+   - User input handling
+   - Message display
+   - Loading states
+   - Send message functionality
+
+### API Routes
+
+1. **Diagnosis API (`/api/diagnosis`)**
+   - Endpoint: POST `/api/diagnosis`
+   - Input: `{ patientContext: string }`
+   - Output: `{ diagnosis: string }`
+   - Model: Gemini Diagnosis Model
+   - Purpose: Identifies potential problem areas from patient context
+
+2. **Solutions API (`/api/solutions`)**
+   - Endpoint: POST `/api/solutions`
+   - Input: `{ patientContext: string }`
+   - Output: `{ solutions: string }`
+   - Model: Gemini Solutions Model
+   - Purpose: Suggests possible solutions based on patient context
+
+3. **Response API (`/api/response`)**
+   - Endpoint: POST `/api/response`
+   - Input: `{ patientContext: string, diagnosis: string[], solutions: string[] }`
+   - Output: `{ response: string }`
+   - Model: Gemini Response Model
+   - Purpose: Generates natural language responses for counselors
+
+### Gemini Models Configuration
+
+1. **Diagnosis Model**
+   - System Instruction: Mental health analysis assistant
+   - Output Format: Comma-separated list of problem areas
+   - Temperature: 1
+   - Max Output Tokens: 8192
+
+2. **Solutions Model**
+   - System Instruction: Mental Health Copilot
+   - Output Format: Comma-separated list of solutions
+   - Temperature: 1
+   - Max Output Tokens: 8192
+
+3. **Response Model**
+   - System Instruction: Mental health support tool
+   - Output Format: Natural language response
+   - Purpose: Aids counselors in treatment approach
+
+## Data Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Frontend
+    participant DiagnosisAPI
+    participant SolutionsAPI
+    participant ResponseAPI
+    participant GeminiModels
+
+    User->>Frontend: Enter patient context
+    Frontend->>DiagnosisAPI: POST /api/diagnosis
+    DiagnosisAPI->>GeminiModels: Generate diagnosis
+    GeminiModels-->>DiagnosisAPI: Return diagnosis
+    DiagnosisAPI-->>Frontend: Return diagnosis list
+
+    Frontend->>SolutionsAPI: POST /api/solutions
+    SolutionsAPI->>GeminiModels: Generate solutions
+    GeminiModels-->>SolutionsAPI: Return solutions
+    SolutionsAPI-->>Frontend: Return solutions list
+
+    Frontend->>ResponseAPI: POST /api/response
+    ResponseAPI->>GeminiModels: Generate response
+    GeminiModels-->>ResponseAPI: Return response
+    ResponseAPI-->>Frontend: Return natural language response
+    Frontend-->>User: Display results
+```
+
+## Security Measures
+
+1. **API Security**
+   - CORS headers configuration
+   - Content Security Policy
+   - XSS Protection
+   - Frame Options
+   - Content Type Options
+   - Referrer Policy
+
+2. **Environment Variables**
+   - GCP credentials management
+   - API keys protection
+   - Project configuration
+
+## Technical Stack
+
+- **Framework**: Next.js 15.3.1
+- **Language**: TypeScript
+- **UI Library**: React 19
+- **Styling**: Tailwind CSS
+- **AI Integration**: Google Generative AI
+- **Development Tools**: ESLint, Turbopack
+
+## Deployment Considerations
+
+1. **Environment Setup**
+   - Node.js LTS version
+   - npm/yarn package manager
+   - Google AI API credentials
+
+2. **Build Process**
+   - Development: `npm run dev`
+   - Production: `npm run build`
+   - Start: `npm run start`
+
+3. **Environment Variables**
+   - GCP credentials
+   - Project configuration
+   - API endpoints
+   - Model configurations
