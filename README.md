@@ -108,20 +108,9 @@ Since LLMs are strong in natural language understanding and classification, I fi
 
 ## ⚙️ System Design
 
-**Frontend:**
-- `Next.js`
-- `React`
-- `Tailwind CSS`
-- `ShadCN`
-
-**Backend:**
-- `Next.js API Routes`
-- `Google Cloud Vertex AI` (Model Inference)
-
-**Database:**
-- Not required — real-time predictions only
-
-**Deployment**
-- Vercel
+- Frontend: Next.js, React, Tailwind CSS, ShadCN
+- Backend: Next.js API Routes, Google Cloud Vertex AI
+- Database: Not required, real-time predictions only
+- Deployment: Vercel
 
 ---
