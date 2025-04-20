@@ -91,3 +91,37 @@ Note: One Patient Context is mapped to multiple Counselor Responses
 6. Group by Patient Context and merge solution labels from multiple responses
 7. Final dataset format:  
    `[Patient Context (cleaned), Comma-separated solution labels]`
+
+## 🧠 Training the ML Models
+
+Since LLMs are strong in natural language understanding and classification, I fine-tuned **two Gemini models** on **Google Cloud Vertex AI**.
+
+### Steps:
+
+- Convert CSV datasets to `.jsonl` format
+- Add system prompts tailored for each task
+- Inject noisy samples (gibberish → label "None") to prevent overfitting
+- Use **GCP Vertex AI** for training & deployment
+- Integrate model endpoints into the app via **GCP SDK**
+
+---
+
+## ⚙️ System Design
+
+**Frontend:**
+- `Next.js`
+- `React`
+- `Tailwind CSS`
+- `ShadCN`
+
+**Backend:**
+- `Next.js API Routes`
+- `Google Cloud Vertex AI` (Model Inference)
+
+**Database:**
+- Not required — real-time predictions only
+
+**Deployment**
+- Vercel
+
+---
