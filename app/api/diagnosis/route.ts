@@ -18,12 +18,11 @@ const getGCPCredentials = () => {
 // Initialize Vertex with your Cloud project and location
 const ai = new GoogleGenAI({
     vertexai: true,
-    project: '764803801890',
-    location: 'us-central1',
+    project: process.env.PROJECT_ID,
+    location: process.env.PROJECT_LOCATION,
     googleAuthOptions: getGCPCredentials()
   });
-  const model = 'projects/764803801890/locations/us-central1/endpoints/2273918689101217792';
-  
+  const model = process.env.DIAGNOSIS_MODEL_STRING;
   
 
 const siText1 = { text: `You are a mental health analysis assistant. Your task is to help mental health counselors identify potential problem areas their patients might be experiencing based on the provided patient context.  You are not a substitute for a licensed professional and your output should be used for informational purposes only.` };

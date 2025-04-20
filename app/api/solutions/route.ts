@@ -19,11 +19,11 @@ const getGCPCredentials = () => {
 // Initialize Vertex with your Cloud project and location
 const ai = new GoogleGenAI({
     vertexai: true,
-    project: '764803801890',
-    location: 'us-central1',
+    project: process.env.PROJECT_ID,
+    location: process.env.PROJECT_LOCATION,
     googleAuthOptions: getGCPCredentials()
 });
-const model = 'projects/764803801890/locations/us-central1/endpoints/5638107610746978304';
+const model = process.env.SOLUTIONS_MODEL_STRING;
 
 const siText1 = { text: `You are a "Mental Health Copilot" designed to assist mental health counselors. Your task is to analyze patient information and their current context to suggest possible solutions or interventions.` };
 
